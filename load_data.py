@@ -38,28 +38,30 @@ data_file_name = data_file.stem
 data = dict()
 idx_observation = 0
 
-with open(data_file, 'rb') as file:
-    avro_reader = fastavro.reader(file)
+for data_file in files_in_folder:
     
-    for idx_in_file, observation in enumerate(avro_reader):
+    with open(data_file, 'rb') as file:
+        avro_reader = fastavro.reader(file)
         
-        for attribute_observation in observation.keys():
-                
-            # if an attribute is missing, add it to the data dict
-            # and fill all the previous entries with null values.
-            if attribute_observation not in data.keys():
-                data[attribute_observation] = \
-                    [None for _ in range(idx_observation)]
+        for idx_in_file, observation in enumerate(avro_reader):
             
-            # As default, set all the attributes to null values.
-            for attribute_data in data.keys():
-                data[attribute_data].append(None)
-            
-            # Assign the values from the file to data dict.
-            data[attribute_observation][idx_observation] = \
-                observation[attribute_observation]
+            for attribute_observation in observation.keys():
+                    
+                # if an attribute is missing, add it to the data dict
+                # and fill all the previous entries with null values.
+                if attribute_observation not in data.keys():
+                    data[attribute_observation] = \
+                        [None for _ in range(idx_observation)]
                 
-            idx_observation += 1
+                # As default, set all the attributes to null values.
+                for attribute_data in data.keys():
+                    data[attribute_data].append(None)
+                
+                # Assign the values from the file to data dict.
+                data[attribute_observation][idx_observation] = \
+                    observation[attribute_observation]
+                    
+                idx_observation += 1
 
     
     
