@@ -47,8 +47,8 @@ schema = StructType([
 
 # Define data
 data = [
-    ('lala_1', None
-    ('lala_2', None) 
+    'lala_1', None,
+    'lala_2', None
 ]
 
 # Create a test dataframe
