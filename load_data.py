@@ -12,10 +12,12 @@ for file in data_files:
 #%% Imports
 from toolbox.imports import *
 
+
 #%% Initialize a spark session
 spark = (SparkSession.builder
          .appName('Wojciech_test')
          .getOrCreate())
+
 
 #%%
 def time_it(function):
@@ -27,6 +29,7 @@ def time_it(function):
         return output
 
     return wrapper
+
 
 #%% Get the paths of data files and folders
 data_root = Path('/data/work/src/musicactivity/')
@@ -62,10 +65,54 @@ data_spark = read_spark()
 
 
 #%%
-df = data_spark.head(5)
+df = data_spark.limit(5)
+df_pd = df.toPandas()
+
+#%%
+df_new = (
+    df
+    .withColumn('devices', f.explode_outer('devices'))
+    .withColumn('tracks', f.explode_outer('tracks'))
+)
 
 
+df_new.show()
+df_new_pd = df_new.toPandas()
 
+
+#%%
+def flatten_columns(df):
+
+    def flattened_columns(df_schema: StructType, mode='raw',  prefix=''):
+        column_names = list()
+
+        for column in df_schema.fields:
+            if isinstance(column.dataType, StructType):
+                if mode == 'raw':
+                    new_prefix = prefix + column.name + '.'
+                else:
+                    new_prefix = prefix + column.name + '_'
+
+                column_names += [prefix + column_name
+                                 for column_name
+                                 in flattened_columns(column.dataType,
+                                                      mode=mode,
+                                                      prefix=new_prefix)
+                ]
+
+            else:
+                column_names.append(prefix + column.name)
+
+        return column_names
+
+    columns_raw = flattened_columns(df.schema, mode='raw')
+    columns_flattened = flattened_columns(df.schema, mode='flattened')
+
+    return df.select(*[f.col(raw).alias(flattened)
+                       for raw, flattened
+                       in zip(columns_raw, columns_flattened)])
+
+#%%
 
 
 #%% Get the open
