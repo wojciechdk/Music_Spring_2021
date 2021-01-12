@@ -9,6 +9,7 @@ Created on Fri Jan  8 20:46:23 2021
 from pyspark.sql.types import ArrayType, BooleanType, FloatType, IntegerType, \
     StringType, StructType, StructField
 
+
 #%% Define the function
 def test_dataframe():
     # Create the colum layout.
