@@ -29,11 +29,12 @@ records = [
     {u'station': u'012650-99999', u'temp': 111, u'time': 1433275478},
 ]
 
-# Writing
+
+#%% Writing
 with open('weather.avro', 'wb') as out:
     writer(out, parsed_schema, records)
 
-# Reading
+#%% Reading
 with open('weather.avro', 'rb') as fo:
     for record in reader(fo):
         print(record)
