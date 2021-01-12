@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 import pyspark
 import toolbox as t
+import time
 
 from pathlib import Path
 from pyspark.sql import SparkSession
@@ -21,27 +22,67 @@ from pyspark.sql import functions as f
 from pyspark.sql.types import ArrayType, BooleanType, FloatType, IntegerType, \
     NullType, StringType, StructType, StructField
 
-#%% Load one data file
 
+#%% Get the paths of data files and folders
 data_root = Path('/data/work/src/musicactivity/')
 data_folders = [item for item in data_root.iterdir() if item.is_dir()]
+     
+data_files = [item 
+              for folder in data_folders
+              for item in folder.iterdir()
+              if item.is_file() and item.suffix == '.avro']
 
-folder_path = data_folders[0]
-folder_name = folder_path.stem
+print(f'Number of folders: {len(data_folders)}')
+print(f'Number of files: {len(data_files)}')
+     
+#%%
 
+with open(data_files[0], 'rb') as file:
+    avro_reader = fastavro.reader(file)
+    print(len(avro_reader))
+
+
+#%% Find all attributes:
+folder_path = data_folders[0]  
 files_in_folder = [item for item in folder_path.iterdir() if item.is_file()]
 data_file = files_in_folder[0]
 data_file_name = data_file.stem
+
+    
+    
+data = dict()
+idx_observation = 0
+all_attributes = list()
+
+start_time = time.time()
+
+for data_file in files_in_folder:
+    
+    with open(data_file, 'rb') as file:
+        avro_reader = fastavro.reader(file)
+        
+        for idx_in_file, observation in enumerate(avro_reader):
+            
+            for attribute_observation in observation.keys():
+                    
+                # if an attribute is missing, add it to the data dict
+                # and fill all the previous entries with null values.
+                if attribute_observation not in all_attributes:
+                    all_attributes.append(attribute_observation)
+                
+execution_time = time.time() - start_time
+print(f'Execution time: {execution_time:.1f} s.')
 
 
 #%% Load data
 data = dict()
 idx_observation = 0
 
+
 for data_file in files_in_folder:
     
     with open(data_file, 'rb') as file:
-        avro_reader = fastavro.reader(file)
+        avro_reader = fastavro.reaif item.is_file() and item.suffix = '.avro']der(file)
         
         for idx_in_file, observation in enumerate(avro_reader):
             
