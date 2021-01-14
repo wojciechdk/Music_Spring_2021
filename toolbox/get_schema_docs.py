@@ -4,13 +4,13 @@ from pyspark.sql.types import StructType
 #%%
 
 
-def get_schema_doc(writer_schema: dict, prefix=''):
+def get_schema_docs(writer_schema: dict, prefix=''):
     """
     Get the doc for each column in an avro writer schema.
 
-    :param writer_schema:
-    :param prefix:
-    :return: list of tuples: (column_name, column_doc)
+    :param writer_schema: avro writer schema
+    :param prefix: Should be left unspecified, used only in recursion
+    :return: List of tuples: (column_name, column_doc)
     """
 
     column_docs = list()
@@ -29,7 +29,7 @@ def get_schema_doc(writer_schema: dict, prefix=''):
 
         # Get the column name and corresponding doc for the subcolumns.
         if 'items' in field['type'].keys():
-            column_docs += get_schema_doc(field['type']['items'],
-                                          prefix=column_name + '_')
+            column_docs += get_schema_docs(field['type']['items'],
+                                           prefix=column_name + '_')
 
     return column_docs

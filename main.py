@@ -10,6 +10,8 @@ for file in data_files:
 """
 
 #%% Imports
+from pyspark.shell import sc
+
 from toolbox.config import Config
 from toolbox.imports import *
 
@@ -29,9 +31,45 @@ df_raw = t.load_data_from_files(data_root, spark)
 #%% Format the dataframe and its data
 df = t.format_dataframe(df_raw)
 
-number_of_records =  3571278161
+number_of_records = 3571278161
 
-#%%
+
+#%% Create a sample dataframe
+
+start_time = time.time()
+
+n_samples = 1e5
+
+df_sample = df.sample(fraction=n_samples / number_of_records,
+                      withReplacement=False)
+
+print(f'Execution time: {time.time() - start_time:.5f} s.')
+
+#%% Save as pickle
+start_time = time.time()
+
+df_sample.rdd.saveAsPickleFile(str(Config.Path.project_data_root /
+                                   'df_sample.pickle'))
+
+print(f'Execution time: {time.time() - start_time:.5f} s.')
+
+
+#%% Load from pickle
+start_time = time.time()
+
+rdd_from_pickle = sc.pickleFile('resources/data/df_sample.pickle').collect()
+
+# rdd_from_pickle = sc.pickleFile(str(Config.Path.project_data_root /
+#                                     'df_sample.pickle')).collect()
+
+df_from_pickle = spark.createDataFrame(rdd_from_pickle)
+df_from_pickle_pd = df_from_pickle.toPandas()
+
+print(f'Execution time: {time.time() - start_time:.5f} s.')
+
+
+
+#%% Count the number of records
 start_time = time.time()
 
 number_of_records = df.count()

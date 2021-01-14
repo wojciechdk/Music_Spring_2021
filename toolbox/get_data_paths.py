@@ -6,7 +6,7 @@ def get_data_paths(verbose=True):
     if verbose:
         print(f'Getting the data paths.')
 
-    data_root = Config.Path.data_root
+    data_root = Config.Path.music_data_root
 
     data_subfolders = [item
                        for item in data_root.iterdir()

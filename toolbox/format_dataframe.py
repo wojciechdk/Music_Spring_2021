@@ -14,6 +14,9 @@ def format_dataframe(df: DataFrame,
     start_time = time.time()
 
     # Explode the columns: "devices" and "tracks"
+    if verbose:
+        print(f'\tExploding columns containing lists.')
+
     df = (
         df
         .withColumn('devices', f.explode_outer('devices'))
@@ -21,9 +24,12 @@ def format_dataframe(df: DataFrame,
     )
 
     # Flatten the schema.
+    if verbose:
+        print(f'\tFlattening the dataframe schema.')
+
     df = t.spark.flatten_schema(df)
 
     if verbose:
-        print(f'Execution time: {time.time() - start_time:.5f}')
+        print(f'\tExecution time: {time.time() - start_time:.5f}')
 
     return df
