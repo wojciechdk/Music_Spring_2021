@@ -11,7 +11,7 @@ class Config:
         music_data_root = Path('/data/work/src/musicactivity/')
 
         # Resources folder
-        resources_root = project_root / resources
+        resources_root = project_root / 'resources'
 
         # Project data folder
-        project_data_root = resources_root / data
+        project_data_root = resources_root / 'data'

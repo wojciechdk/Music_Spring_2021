@@ -8,10 +8,10 @@ Created on Fri Jan  8 20:13:40 2021
 
 import fastavro
 import numpy as np
-import os
 import pandas as pd
 import pandavro
 import pyspark
+import os
 import toolbox as t
 import time
 
@@ -23,5 +23,6 @@ from pyspark.sql.types import ArrayType, BooleanType, FloatType, IntegerType, \
     NullType, StringType, StructType, StructField
 
 # Setup PySpark avro
+import os
 jar_path = '/data/work/shared/tools/spark-avro_2.12-3.0.0.jar'
 os.environ['PYSPARK_SUBMIT_ARGS'] = f'--jars {jar_path} pyspark-shell'
