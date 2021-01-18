@@ -15,7 +15,8 @@ df_1E5 = t.spark.load_dataframe_from_parquet(path_df_1E5, spark)
 df_1E6 = t.spark.load_dataframe_from_parquet(path_df_1E6, spark)
 
 #%% Cache
-
+df_1E5.cache()
+df_1E6.cache()
 
 
 #%% Count the rows
@@ -23,3 +24,5 @@ number_of_rows_df_1E5 = t.spark.count_rows(df_1E5)
 number_of_rows_df_1E6 = t.spark.count_rows(df_1E6)
 
 #%%
+
+
