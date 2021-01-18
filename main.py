@@ -12,7 +12,7 @@ data_root, data_subfolders, data_files = t.get_data_paths()
 
 
 #%% Load data from files
-df_raw = t.load_data_from_files(data_root, spark)
+df_raw = t.load_data_from_files(data_root, spark, method='avro')
 
 
 #%% Format the dataframe and its data
@@ -35,7 +35,7 @@ print(f'Execution time: {time.time() - start_time:.5f} s.')
 
 #%% Save dataframe
 t.spark.save_dataframe_to_parquet(
-    df_sample, Config.Path.project_data_root / 'df_sample_1E6.parquet')
+    df_sample, Config.Path.project_data_root / 'df_sample_1E6_2.parquet')
 
 
 #%% Load dataframe
