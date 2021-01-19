@@ -13,7 +13,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql import functions as f
 from pyspark.sql.avro.functions import from_avro, to_avro
 from pyspark.sql.types import ArrayType, BooleanType, FloatType, IntegerType, \
-    NullType, StringType, StructType, StructField
+    LongType, NullType, StringType, StructType, StructField, TimestampType
 
 # Setup PySpark en
 avro_jar_path = '/data/work/shared/tools/spark-avro_2.12-3.0.0.jar'
