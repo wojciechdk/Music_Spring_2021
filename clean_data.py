@@ -12,7 +12,11 @@ data_root, data_subfolders, data_files = t.get_data_paths()
 
 
 #%% Load the raw data.
-# df_raw = t.load_data_from_files(data_root, spark, method='avro')
+df_raw = t.load_data_from_files(data_root, spark, method='avro')
+df_full = t.format_dataframe(df_raw)
+
+number_of_records = 3571278161
+
 
 
 #%% Load sample dataframe.
@@ -59,19 +63,14 @@ df_n_device_types.show()
 
 
 
+#%% Device types in the full dataframe
+start_time = time.time()
 
-#%%
-# # Compute dataframe with number of listings and neighbourhoods per city.
-# # Order by number of listings (bigger first).
-# df_listings_neighborhoods_per_city = (
-#     df_1E5
-#     .where(f.col("neighbourhood").isNotNull()) # Disregard rows where neighbourhood is not specified.
-#     .groupBy('city')
-#     .agg(
-#         f.countDistinct('id').alias('number_of_listings'),  # Count the number of listings (IDs)
-#         f.countDistinct('neighbourhood').alias('number_of_neighbourhoods')  # Count the number of neighborhoods
-#         )
-#     .orderBy(f.desc('number_of_listings'))
-#     )
-#
+(df_full
+ .groupBy(f.col('devices_type'))
+ .count()
+ .orderBy(f.desc('count'))
+ .show()
+)
 
+print(f'Execution time: {time.time() - start_time:.5f} s.')

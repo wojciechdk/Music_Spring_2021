@@ -21,4 +21,5 @@ memory = '10g'
 os.environ['PYSPARK_SUBMIT_ARGS'] = (
     f'--jars {avro_jar_path}'
     f' --driver-memory {memory}'
+    f' --executor-memory {memory}'
     f' pyspark-shell')
