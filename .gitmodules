@@ -2,3 +2,7 @@
 [submodule "wojciech"]
 	path = wojciech
 	url = git@lab.compute.dtu.dk:s001284/python_package.git
+
+[submodule "report"]
+	path = documentation/report
+	url = git@lab.compute.dtu.dk:s001284/Music_Spring_2021_Report.git
