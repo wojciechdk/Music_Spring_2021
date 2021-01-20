@@ -1,3 +1,4 @@
 .spyproject/
 resources
 toolbox/__pycache__/
+/documentation/notebooks/.ipynb_checkpoints/
