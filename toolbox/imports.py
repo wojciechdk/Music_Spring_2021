@@ -10,7 +10,7 @@ import wojciech as w
 
 from IPython.core.interactiveshell import InteractiveShell
 from pathlib import Path
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession, Window
 from pyspark.sql import functions as f
 from pyspark.sql.avro.functions import from_avro, to_avro
 from pyspark.sql.types import ArrayType, BooleanType, FloatType, IntegerType, \
@@ -23,4 +23,5 @@ os.environ['PYSPARK_SUBMIT_ARGS'] = (
     f'--jars {avro_jar_path}'
     f' --driver-memory {memory}'
     f' --executor-memory {memory}'
+    f' --conf spark.local.dir=/data/work/shared/s001284/spark_tmp'
     f' pyspark-shell')

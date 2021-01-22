@@ -1,7 +1,7 @@
 from toolbox.config import Config
 
 
-def get_data_paths(verbose=True):
+def get_paths_raw_data(verbose=True):
 
     if verbose:
         print(f'Getting the data paths.')

@@ -8,7 +8,7 @@ spark = t.spark.create_session('Music_Activity')
 
 
 #%% Get the paths of data files and folders.
-data_root, data_subfolders, data_files = t.get_data_paths()
+data_root, data_subfolders, data_files = t.get_paths_raw_data()
 
 
 #%% Load the raw data.
