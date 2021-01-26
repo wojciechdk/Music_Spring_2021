@@ -1,3 +1,4 @@
+import datetime
 import fastavro
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
@@ -8,10 +9,9 @@ import pyspark
 import os
 import seaborn as sns
 import toolbox as t
+import tqdm
 import time
 import wojciech as w
-
-
 
 from IPython.core.interactiveshell import InteractiveShell
 from pathlib import Path
@@ -21,7 +21,7 @@ from pyspark.sql.avro.functions import from_avro, to_avro
 from pyspark.sql.types import ArrayType, BooleanType, FloatType, IntegerType, \
     LongType, NullType, StringType, StructType, StructField, TimestampType
 
-# Setup PySpark en
+# Setup PySpark environment
 avro_jar_path = '/data/work/shared/tools/spark-avro_2.12-3.0.0.jar'
 spark_data_folder = '/data/work/shared/s001284/spark_tmp'
 memory_driver = '20g'

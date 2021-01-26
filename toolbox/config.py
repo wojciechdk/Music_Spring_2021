@@ -10,8 +10,16 @@ class Config:
         # Path to the folder containing the music activity data
         music_data_root = Path('/data/work/src/musicactivity/')
 
-        # Resources folder
+        # Resources
         resources_root = project_root / 'resources'
-
-        # Project data folder
         project_data_root = resources_root / 'data'
+
+        # Documentation
+        documentation_root = project_root / 'documentation'
+
+
+        # Report
+        report_root = documentation_root / 'report'
+        report_resources_root = report_root / 'resources'
+        report_images_root = report_resources_root / 'images'
+
