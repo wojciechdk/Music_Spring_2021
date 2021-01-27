@@ -18,12 +18,12 @@ def save_table(table_name: str,
     :return: None
     """
 
-    path = Config.Path.report_root / (table_name + '.tex')
+    path = Config.Path.report_tables_root / (table_name + '.tex')
 
     if verbose:
-        print(f'Saving table to: "{path}".')
+        print(f'Saving table to: "{str(path)}".')
 
-    df.savefig(Config.Path.report_root / table_name)
+    df.savefig(Config.Path.report_tables_root / table_name)
 
     if verbose:
         print(f'\tDone.')

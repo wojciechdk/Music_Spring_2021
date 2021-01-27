@@ -19,10 +19,18 @@ def save_plot(file_name: Union[Path, str],
     :return: None
     """
 
-    path = Config.Path.report_root / file_name
+    # Make sure that file name is a pathlib object.
+    file_name = Path(file_name)
+
+    # If no extension is specified, use default extension.
+    if len(file_name) == 0:
+        file_name = Path(file_name.stem + '.eps')
+
+    # Create the destination path for the file.
+    path = Config.Path.report_images_root / (file_name + 'eps')
 
     if verbose:
-        print(f'Saving table to: "{path}".')
+        print(f'Saving table to: "{str(path)}".')
 
     if instance is not None:
         instance.savefig(path)
