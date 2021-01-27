@@ -19,7 +19,15 @@ def save_plot(file_name: Union[Path, str],
     :return: None
     """
 
+    path = Config.Path.report_root / file_name
+
+    if verbose:
+        print(f'Saving table to: "{path}".')
+
     if instance is not None:
-        instance.savefig(Config.Path.report_root / file_name)
+        instance.savefig(path)
     else:
-        plt.savefig(Config.Path.report_root / file_name)
+        plt.savefig(path)
+
+    if verbose:
+        print(f'\tDone.')
