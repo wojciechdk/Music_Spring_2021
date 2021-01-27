@@ -23,7 +23,7 @@ def save_plot(file_name: Union[Path, str],
     file_name = Path(file_name)
 
     # If no extension is specified, use default extension.
-    if len(file_name) == 0:
+    if len(file_name.suffix) == 0:
         file_name = Path(file_name.stem + '.eps')
 
     # Create the destination path for the file.

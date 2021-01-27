@@ -6,8 +6,8 @@ from toolbox.config import Config
 from typing import Union
 
 
-def save_table(table_name: str,
-               df: pd.DataFrame,
+def save_table(df: pd.DataFrame,
+               table_name: str,
                verbose=True):
     """
     Saves the pandas dataframe in LaTeX format to the report tables folder
@@ -23,8 +23,10 @@ def save_table(table_name: str,
     if verbose:
         print(f'Saving table to: "{str(path)}".')
 
-    df.savefig(Config.Path.report_tables_root / table_name)
+    latex_table = df.to_latex()
 
-    if verbose:
+    with open(path, 'w') as file:
+        file.write(latex_table)
+
+    if verbose:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
         print(f'\tDone.')
-
