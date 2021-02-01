@@ -19,7 +19,7 @@ class Config:
 
         # Report
         report_root = documentation_root / 'report'
-        report_resources_root = report_root / 'resources'
+        report_resources_root = report_root / 'src' / 'resources'
         report_images_root = report_resources_root / 'images'
         report_tables_root = report_resources_root / 'tables'
 
