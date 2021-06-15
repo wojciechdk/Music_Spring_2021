@@ -1,57 +1,32 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jan  8 19:09:49 2021
+personfradrag = 46700
+skattesats = 0.36
 
-@author: s001284
-"""
+indkomst_per_aar = dict()
+folkepension_per_aar = 50000
 
-#%% Imports
-# from toolbox.imports import *
-
-import fastavro
-import numpy as np
-import pandas as pd
-import pyspark
-import toolbox as t
+indkomst_per_aar[64] = 277000
+indkomst_per_aar[65] = 297000
+indkomst_per_aar[66] = 318000
+indkomst_per_aar[67] = 350000
 
 
-from pathlib import Path
-from pyspark.sql import SparkSession
-from pyspark.sql import functions as f
-from pyspark.sql.types import ArrayType, BooleanType, FloatType, IntegerType, \
-    NullType, StringType, StructType, StructField 
+for pensionsalder, indkomst in indkomst_per_aar.items():
 
+    indkomst_efter_skat_per_aar =\
+        indkomst - (indkomst - personfradrag) * skattesats
 
-# Initialize a spark session
-spark = (SparkSession.builder
-         .appName('Wojciech_test')
-         .getOrCreate())
+    indkomst_med_folkepension = indkomst + folkepension_per_aar
+    indkomst_efter_skat_med_folkepension_per_aar = (
+            indkomst_med_folkepension
+            - (indkomst_med_folkepension - personfradrag) * skattesats)
 
+    indkomst_efter_skat_per_maaned = indkomst_efter_skat_per_aar / 12
+    indkomst_efter_skat_med_folkepension_per_maaned = \
+        indkomst_efter_skat_med_folkepension_per_aar / 12
 
-#%% Create a test dataframe
-
-# Create a test dataframe
-df = spark.createDataFrame(*t.test_dataframe())
-
-df.printSchema()
-df.show()
-
-
-#%% Spark NullType
-# Create the colum layout.
-schema = StructType([
-    StructField('A', StringType(), nullable=True),
-    StructField('B', StringType(), nullable=True),
-    ])
-
-# Define data
-data = [
-    'lala_1', None,
-    'lala_2', None
-]
-
-# Create a test dataframe
-df = spark.createDataFrame(data, schema)
-df.printSchema()
-df.show()
+    print(f'### Pensionsalder: {pensionsalder} ###')
+    print(f'Månedlig indkomst efter skat:')
+    print(f'\tUden folkepension: kr. {indkomst_efter_skat_per_maaned:,.2f}')
+    print(f'\tMed folkepension: kr. {indkomst_efter_skat_med_folkepension_per_maaned:,.2f}')
+    print(f'År uden folkepension: {max(67-pensionsalder, 0)}')
+    print()
