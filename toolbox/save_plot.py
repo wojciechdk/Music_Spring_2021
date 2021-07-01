@@ -9,7 +9,7 @@ def save_plot(file_name: Union[Path, str],
               instance: plt.Figure = None,
               verbose=True):
     """
-    Saves the plot to the report folder
+    Saves the plot to the graphics folder for the LaTeX report
 
     :param path: a pathlib path or a string representing the name of the saved
                  file
