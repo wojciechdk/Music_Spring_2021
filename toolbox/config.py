@@ -7,15 +7,23 @@ class Config:
         # Project root
         project_root = Path(__file__).parent.parent
 
-        # Path to the folder containing the music activity data
-        music_data_root = Path('/data/work/src/musicactivity/')
-
         # Resources
         resources_root = project_root / 'resources'
         project_data_root = resources_root / 'data'
 
         # Documentation
         documentation_root = project_root / 'documentation'
+
+        # Path to the folder containing the raw music activity data
+        music_data_raw_root = Path('/data/work/src/musicactivity/')
+        music_data_raw_sample_1E5_root = \
+            project_data_root / 'df_sample_1E5.parquet'
+        music_data_raw_sample_1E6_root = \
+            project_data_root / 'df_sample_1E6.parquet'
+
+        # Path to the folder containing the clean music activity data
+        music_data_clean_root = project_data_root / 'df_clean'
+
 
         # Report
         report_root = documentation_root / 'report'
