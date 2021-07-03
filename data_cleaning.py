@@ -1,29 +1,31 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# <hr style="border:2px solid black"></hr>
-# 
-# # Initialization
+#%% Initialization
 
 # In[1]:
-
-
 from toolbox.initialize import *
 
-# spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
+
+#%% Create a Spark Session
+
+# Initialize a Spark session.
+spark = t.spark.create_session('Music_Activity')
+
+# Set this for faster conversion from Spark to pandas.
+spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
 
 
-# <hr style="border:2px solid black"></hr>
-# 
-# # Cleaning
+#%% Create a Spark SessionLoad data
 
-# ### Choose dataframe
+# Get the full dataset
+data_root_raw, data_subfolders_raw, data_files_raw = t.get_paths_raw_data()
+df_raw = t.load_data_from_files(data_root_raw, spark, method='avro')
+
+# Get a database containing 1e6 randomly chosen samples.
+df_sample_raw_1E6 = t.load_data_from_files(
+    Config.Path.music_data_raw_sample_1E6_root, spark)
 
 # In[2]:
 
-
-df = df_raw
-
+# Choose whether to show the results of the steps leading to the final result.
 display_middle_results = False
 
 
@@ -31,19 +33,19 @@ display_middle_results = False
 
 # In[3]:
 
-
 # Save the start time for timing.
 start_time = time.time()
 
+# Keep only the rows where "deleted_time" is not defined.
 df_clean = (
-    df
+    df_raw
     .where(f.col('deleted_time').isNull()
            | (f.col('deleted_time') == ''))
 )
 
 # Show the top rows of the resulting dataframe.
 if display_middle_results:
-    df_clean.limit(100).toPandas().head()
+    display(df_clean.limit(100).toPandas().head())
 
 # Show the execution time.
 print(f'Execution time: {time.time() - start_time:.5f} s.')
@@ -82,7 +84,7 @@ df_clean = (
     # Keep only the first occurrence of each activity ID.
     .dropDuplicates(['id'])
     
-    # Delete the column containing the lates start time.
+    # Delete the column containing the latest start time.
     .drop('latest_start_time')
 )
 
@@ -105,7 +107,7 @@ df_clean = t.format_dataframe(df_clean)
 
 # Show the top rows of the resulting dataframe.
 if display_middle_results:
-    df_clean.limit(100).toPandas().head()
+    display(df_clean.limit(100).toPandas().head())
 
 
 # ### Replacing start and end time with start time and duration
@@ -142,7 +144,7 @@ df_clean = (
 
 # Show the top rows of the resulting dataframe.
 if display_middle_results:
-    df_clean.limit(100).toPandas().head()
+    display(df_clean.limit(100).toPandas().head())
     
 # Print the execution time.
 print(f'Execution time: {time.time() - start_time:.5f} s.')
@@ -167,7 +169,7 @@ print(f'Execution time: {time.time() - start_time:.5f} s.')
 # df_clean.limit(3).toPandas().head()
 
 
-# ### Drop redundand columns
+# ### Drop redundant columns
 
 # Let's remove the columns:
 # 
@@ -177,7 +179,7 @@ print(f'Execution time: {time.time() - start_time:.5f} s.')
 
 # In[8]:
 
-
+# Drop the redundant columns.
 df_clean = (
     df_clean
     .drop('deleted_time')
