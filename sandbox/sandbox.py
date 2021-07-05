@@ -1,32 +1,43 @@
-personfradrag = 46700
-skattesats = 0.36
+# %%
+from toolbox.initialize import *
 
-indkomst_per_aar = dict()
-folkepension_per_aar = 50000
+import pyspark.sql.functions as f
 
-indkomst_per_aar[64] = 277000
-indkomst_per_aar[65] = 297000
-indkomst_per_aar[66] = 318000
-indkomst_per_aar[67] = 350000
+# Initialize a Spark session.
+spark = t.spark.create_session('Test_WR')
+
+# Set this for faster conversion from Spark to pandas.
+spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
+
+# %%
+# Create the column layout.
+schema = StructType([
+    StructField('name', StructType([
+        StructField('first', ArrayType(StringType()), nullable=True),
+        StructField('middle', ArrayType(StringType()), nullable=True),
+        StructField('last', ArrayType(StringType()), nullable=True),
+    ])),
+    StructField('age', IntegerType(), nullable=True),
+    StructField('gender', StringType(), nullable=True),
+])
+
+# Define data
+data = [
+    ((['Wojciech'], ['Jaroslaw'], ['Mazurkiewicz']), 38, 'M'),
+    ((['Martina'], ['Bo'], ['Rubino']), 33, 'F'),
+    ((['Mia'], [''], ['Rubino']), 2, 'F'),
+    ((['Leo'], [''], ['Rubino']), 1, 'M')]
+
+# Create the dataframe
+df = spark.createDataFrame(data=data, schema=schema)
+
+df.show()
+df.printSchema()
+#
+df = (
+    df.withColumn('name', f.explode_outer('name'))
+)
+df.show()
 
 
-for pensionsalder, indkomst in indkomst_per_aar.items():
-
-    indkomst_efter_skat_per_aar =\
-        indkomst - (indkomst - personfradrag) * skattesats
-
-    indkomst_med_folkepension = indkomst + folkepension_per_aar
-    indkomst_efter_skat_med_folkepension_per_aar = (
-            indkomst_med_folkepension
-            - (indkomst_med_folkepension - personfradrag) * skattesats)
-
-    indkomst_efter_skat_per_maaned = indkomst_efter_skat_per_aar / 12
-    indkomst_efter_skat_med_folkepension_per_maaned = \
-        indkomst_efter_skat_med_folkepension_per_aar / 12
-
-    print(f'### Pensionsalder: {pensionsalder} ###')
-    print(f'Månedlig indkomst efter skat:')
-    print(f'\tUden folkepension: kr. {indkomst_efter_skat_per_maaned:,.2f}')
-    print(f'\tMed folkepension: kr. {indkomst_efter_skat_med_folkepension_per_maaned:,.2f}')
-    print(f'År uden folkepension: {max(67-pensionsalder, 0)}')
-    print()
+# display(df.toPandas())

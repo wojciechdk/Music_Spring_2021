@@ -6,13 +6,15 @@ Created on Fri Jan  8 20:46:23 2021
 @author: s001284
 """
 #%% Imports
+from pyspark.sql.dataframe import DataFrame
+from pyspark.sql.session import SparkSession
 from pyspark.sql.types import ArrayType, BooleanType, FloatType, IntegerType, \
     StringType, StructType, StructField
 
 
 #%% Define the function
-def test_dataframe():
-    # Create the colum layout.
+def test_dataframe(spark: SparkSession):
+    # Create the column layout.
     schema = StructType([
         StructField('name', StructType([
             StructField('first', StringType(), nullable=True),
@@ -30,5 +32,8 @@ def test_dataframe():
         (('Mia', '', 'Rubino'), 2, 'F'),
         (('Leo', '', 'Rubino'), 1, 'M')   
     ]
-    
-    return data, schema
+
+    # Create the dataframe
+    df = spark.createDataFrame(data=data, schema=schema)
+
+    return df
