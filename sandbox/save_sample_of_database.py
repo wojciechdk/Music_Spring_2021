@@ -12,30 +12,23 @@ spark = t.spark.create_session('Music_Activity')
 # Set this for faster conversion from Spark to pandas.
 spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
 
-# Define the path to the data.
-data_path = Config.Path.music_data_clean_root
-
+#%%
 # Load the data into a clean dataframe
-df = t.load_data_from_files(data_path,
+df = t.load_data_from_files(Config.Path.music_data_clean_root,
                             spark,
                             method='parquet')
 
 #%%
-df_pd = df.limit(5).toPandas()
+# n_rows = df.count()
+n_rows = 2530475843
+n_rows_sample = 1e6
 
-#%%
-d
-
-
-#%%
 # Save the dataframe with partitions defined by the first
 # two letters of the user ID.
 (df
- # .withColumn('user_id_prefix', f.col('user_id').substr(0, 2))
- .withColumnRenamed('track_id', 'spotify_uri')
- .withColumnRenamed('track_uri', 'sony_uri')
+ .sample(fraction=n_rows_sample / n_rows)
  .write.mode('overwrite')
- .parquet(str(Config.Path.music_data_clean_sample_1E5_root / 'df_clean_uri'))
+ .parquet(str(Config.Path.music_data_clean_sample_1E6_root))
 )
 
 # Print the execution time.

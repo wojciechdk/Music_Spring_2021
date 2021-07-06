@@ -23,6 +23,10 @@ class Config:
 
         # Path to the folder containing the clean music activity data
         music_data_clean_root = project_data_root / 'df_clean'
+        music_data_clean_sample_1E5_root = \
+            project_data_root / 'df_clean_sample_1E5.parquet'
+        music_data_clean_sample_1E6_root = \
+            project_data_root / 'df_clean_sample_1E6.parquet'
 
 
         # Report
