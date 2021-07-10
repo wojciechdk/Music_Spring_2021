@@ -237,6 +237,32 @@ df_clean = (
 print(f'Execution time: {time.time() - start_time:.5f} s.')
 
 
+#%% Replace undefined values with null
+# Define a function that will replace cells with empty
+# or undefined values with null.
+def replace_invalid_with_null(column_name):
+    return (f.when(f.col(column_name).isin(['', '<unknown>', '�']),
+                   None)
+            .otherwise(f.col(column_name))
+            )
+
+
+# Define the expression thaw will be used together with the
+# "select" statement to replace undefined values with null.
+expression_replace_invalid_with_null = \
+    [replace_invalid_with_null(column_name).alias(column_name)
+     for column_name in df_clean.columns]
+
+# Execute the cleaning.
+df_clean = df_clean.select(*expression_replace_invalid_with_null)
+
+# Show the top rows of the resulting dataframe.
+if display_middle_results:
+    display(df_clean.limit(100).toPandas().head())
+
+
+
+
 # <hr style="border:2px solid black"></hr>
 # 
 # # Save the dataframe

@@ -17,9 +17,9 @@ class Config:
         # Path to the folder containing the raw music activity data
         music_data_raw_root = Path('/data/work/src/musicactivity/')
         music_data_raw_sample_1E5_root = \
-            project_data_root / 'df_sample_1E5.parquet'
+            project_data_root / 'df_raw_sample_1E5.parquet'
         music_data_raw_sample_1E6_root = \
-            project_data_root / 'df_sample_1E6.parquet'
+            project_data_root / 'df_raw_sample_1E6.parquet'
 
         # Path to the folder containing the clean music activity data
         music_data_clean_root = project_data_root / 'df_clean'

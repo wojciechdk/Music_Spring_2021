@@ -16,6 +16,7 @@ import wojciech as w
 
 from IPython.core.interactiveshell import InteractiveShell
 from IPython.core.display import display
+from IPython.core.display import Markdown
 from IPython import get_ipython
 from pathlib import Path
 from pyspark.sql import SparkSession, Window

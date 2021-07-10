@@ -13,11 +13,8 @@ spark = t.spark.create_session('Music_Activity')
 spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
 
 
-# Define the path to the data.
-data_path = Config.Path.music_data_clean_root
-
 # Load the data into a clean dataframe
-df = t.load_data_from_files(data_path,
+df = t.load_data_from_files(Config.Path.music_data_clean_root,
                             spark,
                             method='parquet')
 
@@ -26,8 +23,9 @@ df = t.load_data_from_files(data_path,
 # two letters of the user ID.
 (df
  # .withColumn('user_id_prefix', f.col('user_id').substr(0, 2))
- .withColumnRenamed('track_id', 'spotify_uri')
- .withColumnRenamed('track_uri', 'sony_uri')
+ .withColumnRenamed('track_duration', 'track_playback_duration')
+ .withColumnRenamed('sony_uri', 'track_sony_uri')
+ .withColumnRenamed('spotify_uri', 'track_spotify_uri')
  .write.mode('overwrite')
  .partitionBy('user_id_prefix')
  .parquet(str(Config.Path.project_data_root / 'df_clean_newest'))
