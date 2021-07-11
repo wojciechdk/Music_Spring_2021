@@ -10,6 +10,7 @@ class Config:
         # Resources
         resources_root = project_root / 'resources'
         project_data_root = resources_root / 'data'
+        project_stats_root = resources_root / 'stats'
 
         # Documentation
         documentation_root = project_root / 'documentation'
@@ -28,6 +29,11 @@ class Config:
         music_data_clean_sample_1E6_root = \
             project_data_root / 'df_clean_sample_1E6.parquet'
 
+        # Initial stats
+        initial_stats_df_n_undefined = project_stats_root / 'df_n_undefined.pkl'
+        initial_stats_df_n_distinct = project_stats_root / 'df_n_distinct.pkl'
+        initial_stats_df_combined_stats = \
+            project_stats_root / 'df_combined_stats.pkl'
 
         # Report
         report_root = documentation_root / 'report'
