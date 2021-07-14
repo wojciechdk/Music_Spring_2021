@@ -35,6 +35,9 @@ class Config:
         initial_stats_df_combined_stats = \
             project_stats_root / 'df_combined_stats.pkl'
 
+        initial_stats_playbacks_per_activity_counts = \
+            project_stats_root / 'playbacks_per_activity_counts.npy'
+
         # Report
         report_root = documentation_root / 'report'
         report_resources_root = report_root / 'src' / 'resources'

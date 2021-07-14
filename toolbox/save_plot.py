@@ -27,7 +27,7 @@ def save_plot(file_name: Union[Path, str],
         file_name = Path(file_name.stem + '.eps')
 
     # Create the destination path for the file.
-    path = Config.Path.report_images_root / (file_name + 'eps')
+    path = Config.Path.report_images_root / file_name
 
     if verbose:
         print(f'Saving table to: "{str(path)}".')
